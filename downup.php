@@ -1,27 +1,23 @@
-<?php  
-if ($_GET['data'] && ($_GET['token'] == "arduino")) {//token必须和Arduino端的相同
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+<?php
+//定义数据库信息
+define ( "MYSQL_HOST", "mysql.example.com" );//数据库地址
+define ( "MYSQL_PORT", "3306" );//数据库端口
+define ( "MYSQL_USER", "user" );//数据库账号
+define ( "MYSQL_PASS", "passwords" );//数据库密码
+if ($_GET['data'] && ($_GET['token'] == "arduino")) {//此token必须和Arduino代码中的相同
+        $con = mysql_connect(MYSQL_HOST.':'.MYSQL_PORT,MYSQL_USER,MYSQL_PASS); 
         $data = $_GET['data'];
-        //$data1 = $_GET['data1'];
-        mysql_select_db("app_wxxcc", $con); //数据库名
+        mysql_select_db("database_name", $con); //修改数据库名
         //从数据库中读取SWITCH的状态值
         $result = mysql_query("SELECT * FROM switch");
-        $result1 = mysql_query("SELECT * FROM switch1");
         while($arr = mysql_fetch_array($result)){
                 if ($arr['ID'] == 1) {
                         $state = $arr['state'];
                 }
         }
-        while($arr = mysql_fetch_array($result1)){
-                if ($arr['ID'] == 1) {
-                        $state1 = $arr['state'];
-                }
-        }
         $dati = date("h:i:sa");//获取时间
         $sql ="UPDATE sensor SET timestamp='$dati',data = '$data'
         WHERE ID = '1'";//更新相应的传感器的值
-        /*$sql ="UPDATE sensor1 SET timestamp='$dati',data = '$data1'
-        WHERE ID = '1'";*/
         if(!mysql_query($sql,$con)){
             die('Error: ' . mysql_error());//如果出错，显示错误
         }
