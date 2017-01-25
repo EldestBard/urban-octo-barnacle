@@ -3,15 +3,10 @@
 #define pin A0
 char state = '0';
 char c;
-byte mac[] = { 
-  0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-//IPAddress ip(192,168,1,49);
- 
-//IPAddress myDns(192,168,1,254);
-
+byte mac[] = {
+  0x5E, 0x3A, 0x87, 0x57, 0xDD, 0x14};
 EthernetClient client;
 char server[] = "wxxcc.applinzi.com";
-//int sensordata = 0;
 unsigned long lastConnectionTime = 0;          
 boolean lastConnected = false;                 
 const unsigned long postingInterval = 200*1000;
@@ -24,25 +19,17 @@ float concentration = 0;
 float pm25val = 0.05;
 const float pm25coef = 0.00207916725464941;
 void setup(){
-  pinMode(LED_BUILTIN,OUTPUT);
-  // 设置串口通信波特率
-  //Serial.begin(9600);
-  delay(1000);
   Ethernet.begin(mac);
-  //Serial.print("My IP address: ");
-  //Serial.println(Ethernet.localIP());
   pinMode(pin,INPUT);
   starttime = millis();
 }
   
 void loop(void){
-  //sensordata = analogRead(pin)/4;
   if(state == '0'){
-    digitalWrite(LED_BUILTIN, LOW);      
+    //state为0时的动作
   }else if(state == '1'){
-    digitalWrite(LED_BUILTIN, HIGH);
+    //state为1时的动作
   }
- 
   while(client.available()) {
     c = client.read();
     if (c == '{'){
