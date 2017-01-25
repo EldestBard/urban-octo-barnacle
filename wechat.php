@@ -7,7 +7,11 @@ function echo_server_log($log){
  
 //在微信上设置的TOKEN必须与下方一致
 define ( "TOKEN", "weixin" );
- 
+//定义数据库信息
+define ( "MYSQL_HOST", "mysql.example.com" );//数据库地址
+define ( "MYSQL_PORT", "3306" );//数据库端口
+define ( "MYSQL_USER", "user" );//数据库账号
+define ( "MYSQL_PASS", "passwords" );//数据库密码
 //验证微信公众平台签名
 function checkSignature() {
         $signature = $_GET ['signature'];
@@ -71,11 +75,11 @@ if($msgType == 'voice') {//判断是否为语音
 }elseif($msgType == 'text'){
         $content = $xmlObj->Content;
 }else{
-        $retMsg = '只支持文本和语音消息';
+        $retMsg = '仅支持文本和语音消息';
 }
  
 if (strstr($content, "雾霾")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $con = mysql_connect(MYSQL_HOST.':'.MYSQL_PORT,MYSQL_USER,MYSQL_PASS); 
         mysql_select_db("app_wxxcc", $con);//修改数据库名
  
         $result = mysql_query("SELECT * FROM sensor");
@@ -88,7 +92,7 @@ if (strstr($content, "雾霾")) {
  
     $retMsg = "当前雾霾传感器读数为".$tempr;
 }else if (strstr($content, "开灯")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $con = mysql_connect(MYSQL_HOST.':'.MYSQL_PORT,MYSQL_USER,MYSQL_PASS); 
  
  
         $dati = date("h:i:sa");
@@ -104,7 +108,7 @@ if (strstr($content, "雾霾")) {
                 $retMsg = "好的主人";
         }
 }else if (strstr($content, "关灯")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
+        $con = mysql_connect(MYSQL_HOST.':'.MYSQL_PORT,MYSQL_USER,MYSQL_PASS); 
  
  
         $dati = date("h:i:sa");
@@ -119,38 +123,6 @@ if (strstr($content, "雾霾")) {
                 mysql_close($con);
                 $retMsg = "好的主人";
         }        
-}else if (strstr($content, "打开1")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
- 
- 
-        $dati = date("h:i:sa");
-        mysql_select_db("app_wxxcc", $con);//修改数据库名
- 
-        $sql ="UPDATE switch1 SET timestamp='$dati',state = '1'
-        WHERE ID = '1'";//修改开关状态值
- 
-        if(!mysql_query($sql,$con)){
-            die('Error: ' . mysql_error());
-        }else{
-                mysql_close($con);
-                $retMsg = "好的主人";
-		}
-}else if (strstr($content, "关闭1")) {
-        $con = mysql_connect(SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT,SAE_MYSQL_USER,SAE_MYSQL_PASS); 
- 
- 
-        $dati = date("h:i:sa");
-        mysql_select_db("app_wxxcc", $con);//修改数据库名
- 
-        $sql ="UPDATE switch1 SET timestamp='$dati',state = '0'
-        WHERE ID = '1'";//修改开关状态值
- 
-        if(!mysql_query($sql,$con)){
-            die('Error: ' . mysql_error());
-        }else{
-                mysql_close($con);
-                $retMsg = "好的主人";
-        }
 }else{
         $retMsg = "输入“雾霾”获取当前雾霾传感器读数，“开灯”、“关灯”可改变继电器状态。";
 }
