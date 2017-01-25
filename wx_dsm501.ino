@@ -6,7 +6,7 @@ char c;
 byte mac[] = {
   0x5E, 0x3A, 0x87, 0x57, 0xDD, 0x14};
 EthernetClient client;
-char server[] = "wxxcc.applinzi.com";
+char server[] = "wxxcc.applinzi.com";  //改为自己的网址或IP地址
 unsigned long lastConnectionTime = 0;
 boolean lastConnected = false;
 const unsigned long postingInterval = 200*1000;
